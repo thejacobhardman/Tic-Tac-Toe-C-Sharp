@@ -8,7 +8,7 @@ namespace Tic_Tac_Toe
 {
     class Program
     {
-        static void PrintBoard(char[,] board)
+        private static void PrintBoard(char[,] board)
         {
             Console.WriteLine("     |     |      ");
             Console.WriteLine("  {0}  |  {1}  |  {2}", board[0, 0], board[0, 1], board[0, 2]);
@@ -21,7 +21,7 @@ namespace Tic_Tac_Toe
             Console.WriteLine("     |     |      ");
         }
 
-        static void GetPlayerMove(ref char[,] board, ref bool isPlayerXTurn)
+        private static void GetPlayerMove(ref char[,] board, ref bool isPlayerXTurn)
         {
             bool validMove = false, validInput;
             int row = 0, column = 0;
@@ -74,10 +74,173 @@ namespace Tic_Tac_Toe
             }
         }
 
-        static void GetAiMove(ref Random rand, ref object synlock, ref char[,] board, ref bool isPlayerXTurn)
+        private static void GetAiMove(ref Random rand, ref object synlock, ref bool hardMode, ref char[,] board, ref bool isPlayerXTurn)
         {
             bool validMove = false;
             int row = 0, column = 0;
+
+            if (hardMode == true)
+            {
+                //Checking Horizontal Blocks On First Row
+                if (board[0, 0] == 'X' && board[0, 1] == 'X' && board[0, 2] == ' ')
+                {
+                    row = 0;
+                    column = 2;
+                    validMove = true;
+                }
+                else if (board[0, 0] == 'X' && board[0, 2] == 'X' && board[0, 1] == ' ')
+                {
+                    row = 0;
+                    column = 1;
+                    validMove = true;
+                }
+                else if (board[0, 1] == 'X' && board[0, 2] == 'X' && board[0, 0] == ' ')
+                {
+                    row = 0;
+                    column = 0;
+                    validMove = true;
+                }
+
+                //Checking Horizontal Blocks on Second Row
+                if (board[1, 0] == 'X' && board[1, 1] == 'X' && board[1, 2] == ' ')
+                {
+                    row = 1;
+                    column = 2;
+                    validMove = true;
+                }
+                else if (board[1, 0] == 'X' && board[1, 2] == 'X' && board[1, 1] == ' ')
+                {
+                    row = 1;
+                    column = 1;
+                    validMove = true;
+                }
+                else if (board[1, 1] == 'X' && board[1, 2] == 'X' && board[1, 0] == ' ')
+                {
+                    row = 1;
+                    column = 0;
+                    validMove = true;
+                }
+
+                //Checking Horizontal Blocks On Third Row
+                if (board[2, 0] == 'X' && board[2, 1] == 'X' && board[2, 2] == ' ')
+                {
+                    row = 2;
+                    column = 2;
+                    validMove = true;
+                }
+                else if (board[2, 0] == 'X' && board[2, 2] == 'X' && board[2, 1] == ' ')
+                {
+                    row = 2;
+                    column = 1;
+                    validMove = true;
+                }
+                else if (board[2, 1] == 'X' && board[2, 2] == 'X' && board[2, 0] == ' ')
+                {
+                    row = 2;
+                    column = 0;
+                    validMove = true;
+                }
+
+                //Checking Vertical Blocks on the First Column
+                if (board[0, 0] == 'X' && board[1, 0] == 'X' && board[2, 0] == ' ')
+                {
+                    row = 2;
+                    column = 0;
+                    validMove = true;
+                }
+                else if (board[0, 0] == 'X' && board[2, 0] == 'X' && board[1, 0] == ' ')
+                {
+                    row = 1;
+                    column = 0;
+                    validMove = true;
+                }
+                else if (board[1, 0] == 'X' && board[2, 0] == 'X' && board[0, 0] == ' ')
+                {
+                    row = 0;
+                    column = 0;
+                    validMove = true;
+                }
+
+                //Checking Vertical Blocks on the Second Column
+                if (board[0, 1] == 'X' && board[1, 1] == 'X' && board[2, 1] == ' ')
+                {
+                    row = 2;
+                    column = 1;
+                    validMove = true;
+                }
+                else if (board[0, 1] == 'X' && board[2, 1] == 'X' && board[1, 1] == ' ')
+                {
+                    row = 1;
+                    column = 1;
+                    validMove = true;
+                }
+                else if (board[1, 1] == 'X' && board[2, 1] == 'X' && board[0, 1] == ' ')
+                {
+                    row = 0;
+                    column = 1;
+                    validMove = true;
+                }
+
+                //Checking Vertical Blocks on the Third Column
+                if (board[0, 2] == 'X' && board[1, 2] == 'X' && board[2, 2] == ' ')
+                {
+                    row = 2;
+                    column = 2;
+                    validMove = true;
+                }
+                else if (board[0, 2] == 'X' && board[2, 2] == 'X' && board[2, 1] == ' ')
+                {
+                    row = 2;
+                    column = 1;
+                    validMove = true;
+                }
+                else if (board[2, 1] == 'X' && board[2, 2] == 'X' && board[0, 2] == ' ')
+                {
+                    row = 0;
+                    column = 2;
+                    validMove = true;
+                }
+
+                //Checking Diagonal Blocks from top-left to bottom-right
+                if (board[0, 0] == 'X' && board[1, 1] == 'X' && board[2, 2] == ' ')
+                {
+                    row = 2;
+                    column = 2;
+                    validMove = true;
+                }
+                else if (board[0, 0] == 'X' && board[2, 2] == 'X' && board[1, 1] == ' ')
+                {
+                    row = 1;
+                    column = 1;
+                    validMove = true;
+                }
+                else if (board[1, 1] == 'X' && board[2, 2] == 'X' && board[0, 0] == ' ')
+                {
+                    row = 0;
+                    column = 0;
+                    validMove = true;
+                }
+
+                //Checking Diagonal Blocks from top-right to bottom-left
+                if (board[0, 2] == 'X' && board[1, 1] == 'X' && board[2, 0] == ' ')
+                {
+                    row = 2;
+                    column = 0;
+                    validMove = true;
+                }
+                else if (board[0, 2] == 'X' && board[2, 0] == 'X' && board[1, 1] == ' ')
+                {
+                    row = 1;
+                    column = 1;
+                    validMove = true;
+                }
+                else if (board[1, 1] == 'X' && board[2, 0] == 'X' && board[0, 2] == ' ')
+                {
+                    row = 0;
+                    column = 2;
+                    validMove = true;
+                }
+            }
 
             while (!validMove)
             {
@@ -86,8 +249,9 @@ namespace Tic_Tac_Toe
                     column = rand.Next(0, 3);
                 }
 
-                Console.WriteLine(row + " " + column);
-                Console.ReadKey();
+                //Debug the computer's move
+                //Console.WriteLine((row + 1) + " " + (column + 1));
+                //Console.ReadKey();
 
                 if (board[row, column] == 'X' || board[row, column] == 'O')
                 {
@@ -99,11 +263,18 @@ namespace Tic_Tac_Toe
                 }
             }
 
-            board[row, column] = 'O';
+            if (board[row, column] == ' ')
+            {
+                board[row, column] = 'O';
+            } else
+            {
+                Console.WriteLine("ERROR");
+                Console.ReadKey();
+            }
             isPlayerXTurn = true;
         }
 
-        static bool CheckIfGameOver(ref char[,] board, ref bool didCatWin)
+        private static bool CheckIfGameOver(ref char[,] board, ref bool didCatWin)
         {
             //Check Rows
             if (board[0,0] == board[0,1] && board[0,1] == board[0,2] && board[0,0] != ' ')
@@ -165,16 +336,17 @@ namespace Tic_Tac_Toe
             return false;
         }
 
-        static void ResetGame(ref char[,] board, ref bool isPlayerXTurn, ref bool gameOver, ref bool didCatWin, ref bool modeSelected)
+        private static void ResetGame(ref char[,] board, ref bool isPlayerXTurn, ref bool gameOver, ref bool didCatWin, ref bool modeSelected, ref bool selectDifficulty)
         {
             board = new char[3,3] { { ' ', ' ', ' ' }, { ' ', ' ', ' ' }, { ' ', ' ', ' ' } };
             isPlayerXTurn = true;
             gameOver = false;
             didCatWin = false;
             modeSelected = false;
+            selectDifficulty = false;
         }
 
-        static void DisplayResults(int numOfXWins, int numOfOWins, int numOfCatWins)
+        private static void DisplayResults(int numOfXWins, int numOfOWins, int numOfCatWins)
         {
             Console.WriteLine("\nX's Won " + numOfXWins + " Games.");
             Console.WriteLine("O's Won " + numOfOWins + " Games.");
@@ -223,7 +395,7 @@ namespace Tic_Tac_Toe
 
         static void Main(string[] args)
         {
-            bool isRunning = true, isPlayerXTurn = true, gameOver, didPlayerXWin, didCatWin = false, modeSelected = false, singlePlayer = false;
+            bool isRunning = true, selectDifficulty = false, isPlayerXTurn = true, gameOver, didPlayerXWin, didCatWin = false, modeSelected = false, singlePlayer = false, hardMode = false;
             char[,] board = new char[3,3] { {' ', ' ', ' ' }, { ' ', ' ', ' ' }, { ' ', ' ', ' ' } };
             string userInput;
             int mode, numOfXWins = 0, numOfOWins = 0, numOfCatWins = 0;
@@ -246,8 +418,7 @@ namespace Tic_Tac_Toe
                     if (mode == 1)
                     {
                         singlePlayer = true;
-                        Console.WriteLine("You have enabled singleplayer. \nPress any key to continue.");
-                        Console.ReadKey();
+                        Console.WriteLine("You have enabled singleplayer.");
                     } else if (mode == 2)
                     {
                         singlePlayer = false;
@@ -256,6 +427,33 @@ namespace Tic_Tac_Toe
                     } else
                     {
                         Console.WriteLine("Please enter a valid selection.");
+                    }
+                }
+
+                if (singlePlayer == true)
+                {
+                    while (!selectDifficulty)
+                    {
+                        Console.WriteLine("Would you like to enable hard mode?");
+                        Console.Write("Please enter a '1' to enable hard mode, or a '2' to play on easy: ");
+                        selectDifficulty = int.TryParse(Console.ReadLine(), out mode);
+
+                        if (mode == 1)
+                        {
+                            hardMode = true;
+                            Console.WriteLine("You have enabled hard mode. \nPress any key to continue.");
+                            Console.ReadKey();
+                        }
+                        else if (mode == 2)
+                        {
+                            hardMode = false;
+                            Console.WriteLine("You have disabled hard mode. \nPress any key to continue.");
+                            Console.ReadKey();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Please enter a valid selection.");
+                        }
                     }
                 }
 
@@ -269,7 +467,7 @@ namespace Tic_Tac_Toe
 
                 if (singlePlayer && !gameOver)
                 {
-                    GetAiMove(ref rand, ref synlock, ref board, ref isPlayerXTurn);
+                    GetAiMove(ref rand, ref synlock, ref hardMode, ref board, ref isPlayerXTurn);
 
                     gameOver = CheckIfGameOver(ref board, ref didCatWin);
                 }
@@ -303,7 +501,7 @@ namespace Tic_Tac_Toe
 
                         if (userInput == "y" || userInput == "Y")
                         {
-                            ResetGame(ref board, ref isPlayerXTurn, ref gameOver, ref didCatWin, ref modeSelected);
+                            ResetGame(ref board, ref isPlayerXTurn, ref gameOver, ref didCatWin, ref modeSelected, ref selectDifficulty);
                             userConfirm = true;
                         } else if (userInput == "n" || userInput == "N")
                         {
