@@ -74,6 +74,35 @@ namespace Tic_Tac_Toe
             }
         }
 
+        static void GetAiMove(ref Random rand, ref object synlock, ref char[,] board, ref bool isPlayerXTurn)
+        {
+            bool validMove = false;
+            int row = 0, column = 0;
+
+            while (!validMove)
+            {
+                lock(synlock){
+                    row = rand.Next(0, 3);
+                    column = rand.Next(0, 3);
+                }
+
+                Console.WriteLine(row + " " + column);
+                Console.ReadKey();
+
+                if (board[row, column] == 'X' || board[row, column] == 'O')
+                {
+                    continue;
+                }
+                else
+                {
+                    validMove = true;
+                }
+            }
+
+            board[row, column] = 'O';
+            isPlayerXTurn = true;
+        }
+
         static bool CheckIfGameOver(ref char[,] board, ref bool didCatWin)
         {
             //Check Rows
@@ -136,12 +165,13 @@ namespace Tic_Tac_Toe
             return false;
         }
 
-        static void ResetGame(ref char[,] board, ref bool isPlayerXTurn, ref bool gameOver, ref bool didCatWin)
+        static void ResetGame(ref char[,] board, ref bool isPlayerXTurn, ref bool gameOver, ref bool didCatWin, ref bool modeSelected)
         {
             board = new char[3,3] { { ' ', ' ', ' ' }, { ' ', ' ', ' ' }, { ' ', ' ', ' ' } };
             isPlayerXTurn = true;
             gameOver = false;
             didCatWin = false;
+            modeSelected = false;
         }
 
         static void DisplayResults(int numOfXWins, int numOfOWins, int numOfCatWins)
@@ -193,10 +223,13 @@ namespace Tic_Tac_Toe
 
         static void Main(string[] args)
         {
-            bool isRunning = true, isPlayerXTurn = true, gameOver, didPlayerXWin, didCatWin = false;
+            bool isRunning = true, isPlayerXTurn = true, gameOver, didPlayerXWin, didCatWin = false, modeSelected = false, singlePlayer = false;
             char[,] board = new char[3,3] { {' ', ' ', ' ' }, { ' ', ' ', ' ' }, { ' ', ' ', ' ' } };
             string userInput;
-            int numOfXWins = 0, numOfOWins = 0, numOfCatWins = 0;
+            int mode, numOfXWins = 0, numOfOWins = 0, numOfCatWins = 0;
+
+            Random rand = new Random();
+            object synlock = new object();
 
             Console.Title = "Tic-Tac-Toe";
 
@@ -204,11 +237,42 @@ namespace Tic_Tac_Toe
             {
                 Console.Clear();
 
+                while (!modeSelected)
+                {
+                    Console.WriteLine("Welcome to Tic-Tac-Toe!");
+                    Console.Write("Please enter a '1' to play singleplayer, or a '2' to play multiplayer: ");
+                    modeSelected = int.TryParse(Console.ReadLine(), out mode);
+
+                    if (mode == 1)
+                    {
+                        singlePlayer = true;
+                        Console.WriteLine("You have enabled singleplayer. \nPress any key to continue.");
+                        Console.ReadKey();
+                    } else if (mode == 2)
+                    {
+                        singlePlayer = false;
+                        Console.WriteLine("You have selected multiplayer. \nPress any key to continue.");
+                        Console.ReadKey();
+                    } else
+                    {
+                        Console.WriteLine("Please enter a valid selection.");
+                    }
+                }
+
+                Console.Clear();
+
                 PrintBoard(board);
 
                 GetPlayerMove(ref board, ref isPlayerXTurn);
 
                 gameOver = CheckIfGameOver(ref board, ref didCatWin);
+
+                if (singlePlayer && !gameOver)
+                {
+                    GetAiMove(ref rand, ref synlock, ref board, ref isPlayerXTurn);
+
+                    gameOver = CheckIfGameOver(ref board, ref didCatWin);
+                }
 
                 if (gameOver)
                 {
@@ -239,7 +303,7 @@ namespace Tic_Tac_Toe
 
                         if (userInput == "y" || userInput == "Y")
                         {
-                            ResetGame(ref board, ref isPlayerXTurn, ref gameOver, ref didCatWin);
+                            ResetGame(ref board, ref isPlayerXTurn, ref gameOver, ref didCatWin, ref modeSelected);
                             userConfirm = true;
                         } else if (userInput == "n" || userInput == "N")
                         {
