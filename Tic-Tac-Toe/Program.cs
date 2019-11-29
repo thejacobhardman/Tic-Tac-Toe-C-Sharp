@@ -188,13 +188,13 @@ namespace Tic_Tac_Toe
                     column = 2;
                     validMove = true;
                 }
-                else if (board[0, 2] == 'X' && board[2, 2] == 'X' && board[2, 1] == ' ')
+                else if (board[0, 2] == 'X' && board[2, 2] == 'X' && board[1, 2] == ' ')
                 {
                     row = 2;
                     column = 1;
                     validMove = true;
                 }
-                else if (board[2, 1] == 'X' && board[2, 2] == 'X' && board[0, 2] == ' ')
+                else if (board[1, 2] == 'X' && board[2, 2] == 'X' && board[0, 2] == ' ')
                 {
                     row = 0;
                     column = 2;
@@ -241,6 +241,10 @@ namespace Tic_Tac_Toe
                     validMove = true;
                 }
             }
+
+            //Debug AI Decision
+            //Console.WriteLine(validMove);
+            //Console.ReadKey();
 
             while (!validMove)
             {
