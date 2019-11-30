@@ -354,7 +354,7 @@ namespace Tic_Tac_Toe
         {
             Console.WriteLine("\nX's Won " + numOfXWins + " Games.");
             Console.WriteLine("O's Won " + numOfOWins + " Games.");
-            Console.WriteLine("The Cat Won " + numOfCatWins + " Games");
+            Console.WriteLine("The Cat Won " + numOfCatWins + " Games.");
             if (numOfCatWins > numOfXWins && numOfCatWins > numOfOWins)
             {
                 Console.WriteLine(@" /\_/\
